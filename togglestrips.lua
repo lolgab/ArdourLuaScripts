@@ -51,25 +51,6 @@ ardour {
 			end
 		trackNumber = trackNumber + 1
 		end
-
-		local i = 0
-			while 1 do -- iterate over all plugins/processors
-				local proc = Session:master_out():nth_plugin (i)
-				if proc:isnil () then
-					break
-				end
-				local proc = proc:to_insert()
-				if proc:active() and deactivating_lolgab == 1 then
-					proc:deactivate()
-					already_deactivated_lolgab[proc] = nil
-				elseif deactivating_lolgab == 1 and not proc:active() then
-					already_deactivated_lolgab[proc] = true
-				elseif deactivating_lolgab == 0 and not proc:active() and already_deactivated_lolgab[proc] == nil then
-					proc:activate()
-				end
-				i = i + 1
-			end
-		
-		deactivating_lolgab = 1 - deactivating_lolgab
+	deactivating_lolgab = 1 - deactivating_lolgab
 	end 
 end
