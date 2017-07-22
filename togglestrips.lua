@@ -6,7 +6,7 @@ ardour {
 	description = [[Toggle all Plugins and sends on all tracks]]
 }
 	function factory () return function ()
-		if deactivating == nil then deactivating = 1 end
+		if deactivating_lolgab == nil then deactivating_lolgab = 1 end
 		if already_deactivated_lolgab == nil then already_deactivated_lolgab = {} end
 		local tracks = Session:get_routes ()
 		local trackNumber = 1
@@ -17,17 +17,17 @@ ardour {
 				if proc:isnil () then
 					break
 				end
-				if proc:active() and deactivating == 1 then
+				if proc:active() and deactivating_lolgab == 1 then
 					proc:deactivate()
 					if already_deactivated_lolgab[trackNumber] ~= nil then
 						already_deactivated_lolgab[trackNumber][i] = nil
 					end
-				elseif deactivating == 1 and not proc:active() then
+				elseif deactivating_lolgab == 1 and not proc:active() then
 					if already_deactivated_lolgab[trackNumber] == nil then
 						already_deactivated_lolgab[trackNumber] = {}
 					end
 					already_deactivated_lolgab[trackNumber][i] = true
-				elseif deactivating == 0 and (already_deactivated_lolgab[trackNumber] == nil or already_deactivated_lolgab[trackNumber][i] == nil) then
+				elseif deactivating_lolgab == 0 and (already_deactivated_lolgab[trackNumber] == nil or already_deactivated_lolgab[trackNumber][i] == nil) then
 					proc:activate()
 				end
 				i = i + 1
@@ -39,12 +39,12 @@ ardour {
 				if send:isnil () then
 					break
 				end
-				if send:active() and deactivating == 1 then
+				if send:active() and deactivating_lolgab == 1 then
 					send:deactivate()
 					already_deactivated_lolgab[send] = nil
-				elseif deactivating == 1 and not send:active() then
+				elseif deactivating_lolgab == 1 and not send:active() then
 					already_deactivated_lolgab[send] = true
-				elseif deactivating == 0 and already_deactivated_lolgab[send] == nil then
+				elseif deactivating_lolgab == 0 and already_deactivated_lolgab[send] == nil then
 					send:activate()
 				end
 				i = i + 1
@@ -59,17 +59,17 @@ ardour {
 					break
 				end
 				local proc = proc:to_insert()
-				if proc:active() and deactivating == 1 then
+				if proc:active() and deactivating_lolgab == 1 then
 					proc:deactivate()
 					already_deactivated_lolgab[proc] = nil
-				elseif deactivating == 1 and not proc:active() then
+				elseif deactivating_lolgab == 1 and not proc:active() then
 					already_deactivated_lolgab[proc] = true
-				elseif deactivating == 0 and not proc:active() and already_deactivated_lolgab[proc] == nil then
+				elseif deactivating_lolgab == 0 and not proc:active() and already_deactivated_lolgab[proc] == nil then
 					proc:activate()
 				end
 				i = i + 1
 			end
 		
-		deactivating = 1 - deactivating
+		deactivating_lolgab = 1 - deactivating_lolgab
 	end 
 end
